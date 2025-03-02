@@ -1,0 +1,43 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model ProjectsAndCustomers.Models.AddProjectViewModel // To bind the inputs to the model
+
+@* Copilot hjälpte mig med input-fält, specifikt datuminputs *@ 
+
+<h1>Add Project</h1>
+
+<form method="post">
+
+<div class="mt-3">
+    <label class="form-label" for="title">Title</label>
+    <input class="form-control" type="text" id="title" name="title" required asp-for="Title"/>
+</div>
+
+<div class="mt-3">
+    <label class="form-label" for="description">Description</label>
+    <textarea class="form-control" id="description" name="description" asp-for="Description"></textarea>
+</div>
+
+<div class="mt-3">
+    <label class="form-label" for="startDate">Start Date</label>
+    <input class="form-control" type="date" id="startDate" name="startDate" required asp-for="StartDate"/>
+</div>
+
+<div class="mt-3">
+    <label class="form-label" for="endDate">End Date</label>
+    <input class="form-control" type="date" id="endDate" name="endDate" required asp-for="EndDate"/>
+</div>
+
+<div class="mt-3">
+        <label class="form-label" for="customerName">Customer Name</label>
+        <input class="form-control" type="text" id="customerName" name="customerName" required />
+    </div>
+        <div class="mt-3">
+
+    <button class="btn btn-primary" type="submit">Add Project</button>
+</div>
+
+</form>
