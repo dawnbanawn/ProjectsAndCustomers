@@ -16,6 +16,6 @@ namespace ProjectsAndCustomers.Models {
         // Connections to other entities
 
         public int CustomerId { get; set; }
-        public CustomerEntity CustomerName { get; set; } = null!;
+        public CustomerEntity Customer { get; set; } = null!;
     }
 }

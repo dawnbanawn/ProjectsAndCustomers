@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ProjectsAndCustomers.Data;
 using ProjectsAndCustomers.Models;
 using ProjectsAndCustomers.Models.Entities;
@@ -48,5 +49,18 @@ namespace ProjectsAndCustomers.Controllers {
 
             return View();
         }
+
+        // Get list from database
+        [HttpGet]
+        public async Task<IActionResult> List() {
+            // Get data from projects entity, and include Customer (Copilot hjälpte mig komma på include här)
+            var projects = await dbContext.Projects
+                                           .Include(p => p.Customer)
+                                           .ToListAsync(); 
+
+            return View(projects); // return the view with the data
+        }
+
+
     }
 }
