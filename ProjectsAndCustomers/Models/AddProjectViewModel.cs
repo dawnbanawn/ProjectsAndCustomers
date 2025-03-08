@@ -1,7 +1,7 @@
 ﻿using ProjectsAndCustomers.Models.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-
+// from get started videon
 namespace ProjectsAndCustomers.Models {
     public class AddProjectViewModel {
         [Key]
