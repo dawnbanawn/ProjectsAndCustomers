@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectsAndCustomers.Data;
+using ProjectsAndCustomers.Services.ProjectsService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddScoped<IProjectsService, ProjectsService>(); // Inject the repository interface, copilot hjälpte mig komma på denna buggen.
 // Inject dbcontext, use conenctions string in appsettings
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
 options.UseSqlServer(builder.Configuration.GetConnectionString("Projects")));
