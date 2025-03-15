@@ -1,6 +1,7 @@
 ﻿using ProjectsAndCustomers.Models.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using ProjectsAndCustomers.Models;
 // from get started videon
 namespace ProjectsAndCustomers.Models {
     public class AddProjectViewModel {
@@ -12,6 +13,8 @@ namespace ProjectsAndCustomers.Models {
         public DateTime StartDate { get; set; }
         [Column(TypeName = "date")]
         public DateTime EndDate { get; set; }
+        public int? Budget { get; set; }
+
 
         // Connections to other entities
 
@@ -19,3 +22,5 @@ namespace ProjectsAndCustomers.Models {
         public CustomerEntity Customer { get; set; } = null!;
     }
 }
+
+

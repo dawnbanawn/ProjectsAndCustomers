@@ -44,6 +44,7 @@ namespace ProjectsAndCustomers.Controllers {
                 Description = viewModel.Description,
                 StartDate = viewModel.StartDate,
                 EndDate = viewModel.EndDate,
+                Budget = viewModel.Budget,
                 CustomerId = customer.Id // Use customer instance id here to connect
 
             };
@@ -90,6 +91,7 @@ namespace ProjectsAndCustomers.Controllers {
             project.Description = viewModel.Description;
             project.StartDate = viewModel.StartDate;
             project.EndDate = viewModel.EndDate;
+            project.Budget = viewModel.Budget;
             //project.CustomerId = customer.CustomerName;
             project.Customer.CustomerName = viewModel.Customer.CustomerName; // copilot hjälpte mig med bugg att name=CustomerName krockade med asp-for="Customer.CustomerName" i form-en.
 

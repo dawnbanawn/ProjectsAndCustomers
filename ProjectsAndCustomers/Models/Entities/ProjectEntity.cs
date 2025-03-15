@@ -11,6 +11,7 @@ namespace ProjectsAndCustomers.Models.Entities {
         public DateTime StartDate { get; set; }
         [Column(TypeName = "date")]
         public DateTime EndDate { get; set; }
+        public int? Budget {get; set; }
 
         // Connections to other entities
 
