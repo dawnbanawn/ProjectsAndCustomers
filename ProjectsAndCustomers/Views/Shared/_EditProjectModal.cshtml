@@ -1,0 +1,47 @@
+﻿@model ProjectsAndCustomers.Models.Entities.ProjectEntity
+
+<div class="modal fade" id="editProjectModal" tabindex="-1" role="dialog" aria-labelledby="editProjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProjectModalLabel">Edit Project</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="/Projects/Edit">
+                    <div class="mt-3">
+                        <label class="form-label" for="id">Id</label>
+                        <input class="form-control" type="text" id="id" name="id" readonly asp-for="Id" />
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label" for="title">Title</label>
+                        <input class="form-control" type="text" id="title" name="title" required asp-for="Title" />
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label" for="description">Description</label>
+                        <textarea class="form-control" id="description" name="description" asp-for="Description"></textarea>
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label" for="startDate">Start Date</label>
+                        <input class="form-control" type="date" id="startDate" name="startDate" required asp-for="StartDate" />
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label" for="endDate">End Date</label>
+                        <input class="form-control" type="date" id="endDate" name="endDate" required asp-for="EndDate" />
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label" for="budget">Budget</label>
+                        <input class="form-control" type="number" id="budget" name="budget" required asp-for="Budget" />
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label" for="customerName">Customer Name</label>
+                        <input class="form-control" type="text" id="customerName" name="Customer.CustomerName" asp-for="Customer.CustomerName" />
+                    </div>
+                    <div class="mt-3">
+                        <button class="btn btn-primary" type="submit">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

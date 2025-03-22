@@ -40,19 +40,70 @@
 
                 <td>@project.Customer.CustomerName</td>
                 <td>
-                    @* edit button that sends project id *@
-                    <a asp-controller="Projects" asp-action="Edit" asp-route-id="@project.Id">Edit</a> 
+                    <button class="btn btn-primary" onclick="editProduct(@project.Id)" data-project-id="@project.Id">Edit</button>
                 </td>
 
             </tr>
         }
+        
+
     </tbody>
 
 </table>
+
+@* <div id="modalContainer"></div> *@
+<div id="modalWrapper">
+    @* Inject form here *@
+</div>
+
 @* The reusable partial view that loads the modal, it sends the model to it, copilot helped me with the code for activating the modal. *@
 @Html.Partial("_AddProjectModal", new ProjectsAndCustomers.Models.AddProjectViewModel())
+@await Html.PartialAsync("_EditProjectModal", new ProjectsAndCustomers.Models.Entities.ProjectEntity())
+
+@* Copilot helped me with ajax code for modals *@
 <script>
+    // Code for opening the add project modal
     function openModal() {
         $('#addProjectModal').modal('show'); 
     }
+        $(function() {
+        $('.editModal').modal();
+    });
+    // Code for opening the edit modal
+    function editProduct(productId) {
+        console.log("Product ID:", productId);
+        $.ajax({
+            url: '/Projects/Edit/' + productId,
+            success: function(data) {
+                $('#modalWrapper').html(data); // Injects the partial view
+                $('#editProjectModal').modal('show'); // Activates the modal
+            }
+        });
+    }
+    // Code for sumbitting the edit modal
+    $(document).on('submit', '#editProjectModal form', function(event) {
+        event.preventDefault(); // Prevent default form submission
+        let formData = $(this).serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: '/Projects/Edit',
+            data: formData,
+            success: function(response) {
+                console.log('Edit successful!');
+                $('#editProjectModal').modal('hide'); // Close the modal
+                location.reload(); // Reload the page 
+            },
+            error: function(xhr, status, error) {
+                console.error('Edit failed:', error);
+            }
+        });
+    });
+
+
 </script>
+
+
+
+
+

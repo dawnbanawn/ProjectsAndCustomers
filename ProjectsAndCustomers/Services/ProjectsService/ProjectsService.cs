@@ -36,6 +36,7 @@ namespace ProjectsAndCustomers.Services.ProjectsService {
             return await dbContext.Projects
                                   .Include(p => p.Customer)
                                   .FirstOrDefaultAsync(p => p.Id == id);
+
         }
         public async Task UpdateProjectAsync(ProjectEntity project) {
             dbContext.Projects.Update(project);

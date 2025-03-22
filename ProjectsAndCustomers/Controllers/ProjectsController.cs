@@ -68,39 +68,53 @@ namespace ProjectsAndCustomers.Controllers {
         }
 
         // Get for getting the Edit view
+        //[HttpGet]
+        //public async Task<IActionResult> Edit(int id) {
+        //    // Get only one project with incoming id, som sagt ovan så hjälpte copilot mig med include. KLurigt med två entiteter.
+        //    //var project = await dbContext.Projects
+        //    //                                 .Include(p => p.Customer)
+        //    //                                 .FirstOrDefaultAsync(p => p.Id == id);
+        //    var project = await projectsService.GetProjectWithCustomerByIdAsync(id);
+
+        //    return View(project); // Return the edit view with the project
+
+        //}
         [HttpGet]
         public async Task<IActionResult> Edit(int id) {
-            // Get only one project with incoming id, som sagt ovan så hjälpte copilot mig med include. KLurigt med två entiteter.
-            //var project = await dbContext.Projects
-            //                                 .Include(p => p.Customer)
-            //                                 .FirstOrDefaultAsync(p => p.Id == id);
             var project = await projectsService.GetProjectWithCustomerByIdAsync(id);
 
-            return View(project); // Return the edit view with the project
+            if (project == null) {
+                return NotFound();
+            }
 
+            return PartialView("_EditProjectModal", project); // Return the modal partial with the project data
         }
+
+
         // Method to recieve the form data from the edit page
         [HttpPost]
         public async Task<IActionResult> Edit(ProjectEntity viewModel) {
-            //var project = await dbContext.Projects
-            //                             .Include(p => p.Customer)
-            //                             .FirstOrDefaultAsync(p => p.Id == viewModel.Id);
             var project = await projectsService.GetProjectWithCustomerByIdAsync(viewModel.Id);
-            // Save the new data to model
+
+            if (project == null) {
+                return NotFound();
+            }
+
+            // Check and initialize the Customer property if null
+            project.Customer ??= new CustomerEntity();
+
+            // Map the updated values
             project.Title = viewModel.Title;
             project.Description = viewModel.Description;
             project.StartDate = viewModel.StartDate;
             project.EndDate = viewModel.EndDate;
             project.Budget = viewModel.Budget;
-            //project.CustomerId = customer.CustomerName;
-            project.Customer.CustomerName = viewModel.Customer.CustomerName; // copilot hjälpte mig med bugg att name=CustomerName krockade med asp-for="Customer.CustomerName" i form-en.
+            project.Customer.CustomerName = viewModel.Customer.CustomerName;
 
-            // Save changes to the database
-            //await dbContext.SaveChangesAsync();
+            // Save changes
             await projectsService.UpdateProjectAsync(project);
-            // Redirect to list view in projects folder/controller
+
             return RedirectToAction("List", "Projects");
-            
         }
     }
 }
