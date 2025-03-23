@@ -67,7 +67,6 @@ namespace ProjectsAndCustomers.Controllers {
             return View(projects); // return the view with the data
         }
 
-        // Get for getting the Edit view
         //[HttpGet]
         //public async Task<IActionResult> Edit(int id) {
         //    // Get only one project with incoming id, som sagt ovan så hjälpte copilot mig med include. KLurigt med två entiteter.
@@ -79,6 +78,8 @@ namespace ProjectsAndCustomers.Controllers {
         //    return View(project); // Return the edit view with the project
 
         //}
+
+        // Get for getting the Edit partial view
         [HttpGet]
         public async Task<IActionResult> Edit(int id) {
             var project = await projectsService.GetProjectWithCustomerByIdAsync(id);

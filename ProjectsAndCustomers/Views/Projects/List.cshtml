@@ -10,6 +10,10 @@
 <h1>Projects</h1>
 @* Button for opening the model which adds a project *@
 <button id="addProjectBtn" onclick="openModal()">Add Project</button>>
+@* Buttons for fitlering depending on the start end enddate which signals if the project is complete or in progress *@
+<button id="allProjectsBtn" onclick="filterProjects('all')">All Projects</button>
+<button id="completedProjectsBtn" onclick="filterProjects('completed')">Completed Projects</button>
+<button id="startedProjectsBtn" onclick="filterProjects('started')">Started Projects</button>
 
 <table class="table">
     <thead>
@@ -20,36 +24,29 @@
             <th>Start Date</th>
             <th>End Date</th>
             <th>Budget</th>
-
             <th>Customer Name</th>
-
             <th></th>
-
-
         </tr>
     </thead>
-    <tbody>
-        @foreach (var project in Model){ // Loop through the list to show all projects
-            <tr>
+    <tbody id="projectsTable">
+        @foreach (var project in Model)
+        {
+            <tr data-end-date="@project.EndDate" data-start-date="@project.StartDate">
                 <td>@project.Id</td>
                 <td>@project.Title</td>
                 <td>@project.Description</td>
-                <td>@project.StartDate</td>
-                <td>@project.EndDate</td>
+                <td>@project.StartDate.ToString("yyyy-MM-dd")</td>
+                <td>@project.EndDate.ToString("yyyy-MM-dd")</td>
                 <td>@project.Budget</td>
-
                 <td>@project.Customer.CustomerName</td>
                 <td>
                     <button class="btn btn-primary" onclick="editProduct(@project.Id)" data-project-id="@project.Id">Edit</button>
                 </td>
-
             </tr>
         }
-        
-
     </tbody>
-
 </table>
+
 
 @* <div id="modalContainer"></div> *@
 <div id="modalWrapper">
@@ -73,7 +70,7 @@
     function editProduct(productId) {
         console.log("Product ID:", productId);
         $.ajax({
-            url: '/Projects/Edit/' + productId,
+            url: '/Projects/Edit/' + productId, // sends id to cotnroller
             success: function(data) {
                 $('#modalWrapper').html(data); // Injects the partial view
                 $('#editProjectModal').modal('show'); // Activates the modal
@@ -99,11 +96,56 @@
             }
         });
     });
-
-
 </script>
 
 
 
+<script> // Function to get and check all rows, and compare it to todays date, and filter depending on the button. Copilot helped.
+    function filterProjects(filter) {
+        const today = new Date(); // Today's date
+        const rows = document.querySelectorAll('#projectsTable tr'); // All table rows
+
+        rows.forEach(row => {
+            const endDateRaw = row.getAttribute('data-end-date'); // Get raw end date string
+            const startDateRaw = row.getAttribute('data-start-date'); // Get raw start date string
+
+            // Convert European format (DD/MM/YYYY HH:mm:ss) to ISO format (YYYY-MM-DDTHH:mm:ss), because the date in the model isn´t in the correct format to compare.
+            const endDate = convertToISO(endDateRaw);
+            const startDate = convertToISO(startDateRaw);
+
+            // Ensure conversion worked before comparing dates
+            if (endDate && startDate) {
+                switch (filter) {
+                    case 'all':
+                        row.style.display = ''; // Show all rows
+                        break;
+                    case 'completed':
+                        row.style.display = (endDate < today) ? '' : 'none'; // Show completed rows
+                        break;
+                    case 'started':
+                        row.style.display = (endDate >= today) ? '' : 'none'; // Show started rows
+                        break;
+                    default:
+                        row.style.display = ''; // Default to showing all rows
+                }
+            } else {
+                console.error('Failed to parse date:', endDateRaw, startDateRaw);
+                row.style.display = 'none'; // Hide rows with invalid date format
+            }
+        });
+    }
+
+    // Helper function to convert European date format to ISO format, used by the filter function.
+    function convertToISO(dateString) {
+        if (!dateString) return null;
+
+        const parts = dateString.split(/[/ :]/); // Split the date by "/", " ", and ":"
+        if (parts.length < 5) return null;
+
+        const [day, month, year, hours, minutes, seconds] = parts;
+        // Format as ISO (YYYY-MM-DDTHH:mm:ss), s o that it can be compared to todayss date.
+        return new Date(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}`);
+    }
+</script>
 
 
