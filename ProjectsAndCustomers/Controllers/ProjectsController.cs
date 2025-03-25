@@ -4,6 +4,9 @@ using ProjectsAndCustomers.Data;
 using ProjectsAndCustomers.Models;
 using ProjectsAndCustomers.Models.Entities;
 using ProjectsAndCustomers.Services.ProjectsService;
+using Microsoft.AspNetCore.Authorization;
+
+
 
 namespace ProjectsAndCustomers.Controllers {
     public class ProjectsController : Controller {
@@ -56,6 +59,7 @@ namespace ProjectsAndCustomers.Controllers {
             return RedirectToAction("List", "Projects"); // Go to list page after adding project.
         }
 
+        [Authorize]
         // Get list from database
         [HttpGet]
         public async Task<IActionResult> List() {
