@@ -43,5 +43,27 @@ namespace ProjectsAndCustomers.Services.ProjectsService {
             await dbContext.SaveChangesAsync();
         }
 
+        public async Task<bool> DeleteProjectAsync(int projectId) {
+            Console.WriteLine($"Attempting to delete project with ID: {projectId}");
+
+            var project = await dbContext.Projects.FindAsync(projectId);
+
+            if (project == null) {
+                Console.WriteLine($"Project with ID {projectId} not found.");
+                return false;
+            }
+
+            try {
+                dbContext.Projects.Remove(project);
+                await dbContext.SaveChangesAsync();
+                Console.WriteLine($"Project with ID {projectId} deleted successfully.");
+                return true;
+            } catch (Exception ex) {
+                Console.WriteLine($"Error deleting project: {ex.Message}");
+                return false;
+            }
+        }
+
+
     }
 }

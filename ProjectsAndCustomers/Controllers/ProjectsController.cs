@@ -59,7 +59,7 @@ namespace ProjectsAndCustomers.Controllers {
             return RedirectToAction("List", "Projects"); // Go to list page after adding project.
         }
 
-        [Authorize]
+        //[Authorize]
         // Get list from database
         [HttpGet]
         public async Task<IActionResult> List() {
@@ -121,5 +121,25 @@ namespace ProjectsAndCustomers.Controllers {
 
             return RedirectToAction("List", "Projects");
         }
+
+        // Delete a project
+        [HttpPost]
+        public async Task<IActionResult> Delete([FromQuery] int id) {
+            if (id <= 0) {
+                return BadRequest("Invalid project ID.");
+            }
+
+            var isDeleted = await projectsService.DeleteProjectAsync(id);
+
+            if (isDeleted) {
+                return Ok(); // Deletion was successful
+            }
+
+            return BadRequest("Failed to delete the project."); // Deletion failed
+        }
+
+
+
+
     }
 }

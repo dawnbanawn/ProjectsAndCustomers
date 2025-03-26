@@ -40,7 +40,26 @@
                 <td>@project.Budget</td>
                 <td>@project.Customer.CustomerName</td>
                 <td>
-                    <button class="btn btn-primary" onclick="editProduct(@project.Id)" data-project-id="@project.Id">Edit</button>
+@*                     <button class="btn btn-primary" onclick="editProduct(@project.Id)" data-project-id="@project.Id">Edit</button> This works, remove this text
+ *@                
+
+                        <div class="dropdown">
+                        <!-- Three dots button -->
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            ...
+                        </button>
+
+                        <!-- Dropdown menu -->
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li>
+                                <button class="dropdown-item" onclick="editProject(@project.Id)" data-project-id="@project.Id">Edit</button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item" onclick="deleteProject(@project.Id)" data-project-id="@project.Id">Delete</button>
+                            </li>
+                        </ul>
+                    </div>
+
                 </td>
             </tr>
         }
@@ -57,8 +76,33 @@
 @Html.Partial("_AddProjectModal", new ProjectsAndCustomers.Models.AddProjectViewModel())
 @await Html.PartialAsync("_EditProjectModal", new ProjectsAndCustomers.Models.Entities.ProjectEntity())
 
+
+
+
 @* Copilot helped me with ajax code for modals *@
 <script>
+    //Delete button
+    function deleteProject(projectId) {
+        console.log("Deleting project with ID:", projectId);
+
+        fetch(`/Projects/Delete?id=${projectId}`, {
+            method: 'POST'
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log("Project deleted successfully.");
+                location.reload(); // Reload the page to reflect changes
+            } else {
+                console.error("Failed to delete the project.");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+    }
+
+
+
     // Code for opening the add project modal
     function openModal() {
         $('#addProjectModal').modal('show'); 
@@ -67,7 +111,7 @@
         $('.editModal').modal();
     });
     // Code for opening the edit modal
-    function editProduct(productId) {
+    function editProject(productId) {
         console.log("Product ID:", productId);
         $.ajax({
             url: '/Projects/Edit/' + productId, // sends id to cotnroller

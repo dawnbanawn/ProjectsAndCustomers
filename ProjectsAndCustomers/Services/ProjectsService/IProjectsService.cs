@@ -13,5 +13,7 @@ namespace ProjectsAndCustomers.Services.ProjectsService {
         Task<ProjectEntity> GetProjectWithCustomerByIdAsync(int id); // For edit page
 
         Task UpdateProjectAsync(ProjectEntity project);
+        Task<bool> DeleteProjectAsync(int projectId);
+
     }
 }
