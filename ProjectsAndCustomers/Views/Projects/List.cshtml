@@ -43,21 +43,23 @@
 @*                     <button class="btn btn-primary" onclick="editProduct(@project.Id)" data-project-id="@project.Id">Edit</button> This works, remove this text
  *@                
 
-                        <div class="dropdown">
-                        <!-- Three dots button -->
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                            ...
-                        </button>
-
+                    <div class="dropdown">
                         <!-- Dropdown menu -->
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li>
-                                <button class="dropdown-item" onclick="editProject(@project.Id)" data-project-id="@project.Id">Edit</button>
-                            </li>
-                            <li>
-                                <button class="dropdown-item" onclick="deleteProject(@project.Id)" data-project-id="@project.Id">Delete</button>
-                            </li>
-                        </ul>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <!-- Three dots button without arrow -->
+                            <button class="btn btn-secondary custom-dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                ...
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <li>
+                                    <button class="dropdown-item" onclick="editProject(@project.Id)" data-project-id="@project.Id">Edit</button>
+                                </li>
+                                <li>
+                                    <button class="dropdown-item" onclick="deleteProject(@project.Id)" data-project-id="@project.Id">Delete</button>
+                                </li>
+                            </ul>
+                        }
                     </div>
 
                 </td>

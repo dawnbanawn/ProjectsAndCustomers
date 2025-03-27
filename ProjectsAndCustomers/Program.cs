@@ -21,6 +21,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+//builder.Services.AddAuthentication()
+//        .AddCookie(IdentityConstants.ApplicationScheme);
 
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
@@ -47,8 +49,10 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{controller=Projects}/{action=List}/{id?}")
     .WithStaticAssets();
 
 
 app.Run();
+
+//!Test12345

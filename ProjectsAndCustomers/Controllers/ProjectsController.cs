@@ -20,6 +20,7 @@ namespace ProjectsAndCustomers.Controllers {
 
 
         // Get method for getting the add page view, /projects/add 
+        [Authorize]
         [HttpGet]
         public IActionResult Add() {
             return View();
@@ -27,6 +28,7 @@ namespace ProjectsAndCustomers.Controllers {
 
         // Post method for the submit button in the form with post method, asyncronous because of the db handling
         // Copilot hjälpte mig lista ut att jag kunde ta med customerName bredvid viewModel argumentet, och bara duplicera processen.
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Add(AddProjectViewModel viewModel, string customerName) { // Post button returns form data bound to this model
 
@@ -84,6 +86,7 @@ namespace ProjectsAndCustomers.Controllers {
         //}
 
         // Get for getting the Edit partial view
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Edit(int id) {
             var project = await projectsService.GetProjectWithCustomerByIdAsync(id);
@@ -97,6 +100,7 @@ namespace ProjectsAndCustomers.Controllers {
 
 
         // Method to recieve the form data from the edit page
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Edit(ProjectEntity viewModel) {
             var project = await projectsService.GetProjectWithCustomerByIdAsync(viewModel.Id);
@@ -123,6 +127,7 @@ namespace ProjectsAndCustomers.Controllers {
         }
 
         // Delete a project
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Delete([FromQuery] int id) {
             if (id <= 0) {

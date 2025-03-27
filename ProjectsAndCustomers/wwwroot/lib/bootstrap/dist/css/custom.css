@@ -1,0 +1,3 @@
+﻿.custom-dropdown-toggle::after {
+    display: none; /* Hides the dropdown arrow */
+}
