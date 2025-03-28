@@ -10,72 +10,64 @@
 <h1>Projects</h1>
 @* Button for opening the model which adds a project *@
 @* <button id="addProjectBtn" onclick="openModal()">Add Project</button>> *@
+<div style="display: flex; justify-content: space-between">
+    <div>
+    @* Buttons for fitlering depending on the start end enddate which signals if the project is complete or in progress *@
+        <a href="#Foo" id="allProjectsBtn" onclick="filterProjects('all')">All Projects</a>
+        <a href="#Foo" id="completedProjectsBtn" onclick="filterProjects('completed')">Completed Projects</a>
+        <a href="#Foo" id="startedProjectsBtn" onclick="filterProjects('started')">Started Projects</a>
+    </div>
+    @* Shows add project button if user is logged in *@
+    @if (User.Identity.IsAuthenticated)
+    {
+        <button class="btn btn-primary btn-lg active" id="addProjectBtn" onclick="openModal()">Add Project</button>
 
-@* Buttons for fitlering depending on the start end enddate which signals if the project is complete or in progress *@
-<button id="allProjectsBtn" onclick="filterProjects('all')">All Projects</button>
-<button id="completedProjectsBtn" onclick="filterProjects('completed')">Completed Projects</button>
-<button id="startedProjectsBtn" onclick="filterProjects('started')">Started Projects</button>
+    }
+</div>
 
-@* Shows add project button if user is logged in *@
-@if (User.Identity.IsAuthenticated)
-{
-    <button id="addProjectBtn" onclick="openModal()">Add Project</button>
 
-}
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Budget</th>
-            <th>Customer Name</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody id="projectsTable">
+<div id="projectsTable" style="display: flex; flex-wrap: wrap" class="projectsContainer">
         @foreach (var project in Model)
         {
-            
-            <tr data-end-date="@project.EndDate" data-start-date="@project.StartDate">
-                <td>@project.Id</td>
-                <td>@project.Title</td>
-                <td>@project.Description</td>
-                <td>@project.StartDate.ToString("yyyy-MM-dd")</td>
-                <td>@project.EndDate.ToString("yyyy-MM-dd")</td>
-                <td>@project.Budget</td>
-                <td>@project.Customer.CustomerName</td>
-                <td>
-@*                     <button class="btn btn-primary" onclick="editProduct(@project.Id)" data-project-id="@project.Id">Edit</button> This works, remove this text
- *@                
+        <div data-end-date="@project.EndDate" data-start-date="@project.StartDate" class="card shadow-lg" style="width: 300px; height: 200px; margin: 5px">
+            <div style="display: flex; justify-content: space-between">
+                <img src="/images/netimg.jpg" class="card-img-top" alt="Project Thumbnail" style="width: 50px; height: 50px; margin-left: 10px; margin-top: 10px;">
+            <div>
+                    <h5 class="card-title">@project.Title</h5>
+                    <h5 class="card-title">@project.Customer.CustomerName</h5>
+            </div>
+                <div class="dropdown" style="margin-right: 10px; margin-top: 10px;">
+                @* checks if user is logged in *@
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @* Button for dropdown *@
+                    <button class="btn btn-secondary custom-dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        ...
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li>
+                            <button class="dropdown-item" onclick="editProject(@project.Id)" data-project-id="@project.Id">Edit</button>
+                        </li>
+                        <li>
+                            <button class="dropdown-item" onclick="deleteProject(@project.Id)" data-project-id="@project.Id">Delete</button>
+                        </li>
+                    </ul>
+                }
+            </div>
+            </div>
+            <div class="card-body">
+   
 
-                    <div class="dropdown">
-                        @* checks if user is logged in *@
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            @* Button for dropdown *@
-                            <button class="btn btn-secondary custom-dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                ...
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li>
-                                    <button class="dropdown-item" onclick="editProject(@project.Id)" data-project-id="@project.Id">Edit</button>
-                                </li>
-                                <li>
-                                    <button class="dropdown-item" onclick="deleteProject(@project.Id)" data-project-id="@project.Id">Delete</button>
-                                </li>
-                            </ul>
-                        }
-                    </div>
+                <p class="card-text">@project.Description</p>
+            </div>
 
-                </td>
-            </tr>
+  
+               
+
+            </div>
         }
-    </tbody>
-</table>
+    </div>
 
 
 @* <div id="modalContainer"></div> *@
@@ -158,7 +150,7 @@
 <script> // Function to get and check all rows, and compare it to todays date, and filter depending on the button. Copilot helped.
     function filterProjects(filter) {
         const today = new Date(); // Today's date
-        const rows = document.querySelectorAll('#projectsTable tr'); // All table rows
+        const rows = document.querySelectorAll('.card'); // All table rows
 
         rows.forEach(row => {
             const endDateRaw = row.getAttribute('data-end-date'); // Get raw end date string
