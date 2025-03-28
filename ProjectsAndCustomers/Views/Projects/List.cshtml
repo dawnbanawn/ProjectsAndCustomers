@@ -9,11 +9,19 @@
 
 <h1>Projects</h1>
 @* Button for opening the model which adds a project *@
-<button id="addProjectBtn" onclick="openModal()">Add Project</button>>
+@* <button id="addProjectBtn" onclick="openModal()">Add Project</button>> *@
+
 @* Buttons for fitlering depending on the start end enddate which signals if the project is complete or in progress *@
 <button id="allProjectsBtn" onclick="filterProjects('all')">All Projects</button>
 <button id="completedProjectsBtn" onclick="filterProjects('completed')">Completed Projects</button>
 <button id="startedProjectsBtn" onclick="filterProjects('started')">Started Projects</button>
+
+@* Shows add project button if user is logged in *@
+@if (User.Identity.IsAuthenticated)
+{
+    <button id="addProjectBtn" onclick="openModal()">Add Project</button>
+
+}
 
 <table class="table">
     <thead>
@@ -31,6 +39,7 @@
     <tbody id="projectsTable">
         @foreach (var project in Model)
         {
+            
             <tr data-end-date="@project.EndDate" data-start-date="@project.StartDate">
                 <td>@project.Id</td>
                 <td>@project.Title</td>
@@ -44,10 +53,10 @@
  *@                
 
                     <div class="dropdown">
-                        <!-- Dropdown menu -->
+                        @* checks if user is logged in *@
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <!-- Three dots button without arrow -->
+                            @* Button for dropdown *@
                             <button class="btn btn-secondary custom-dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                 ...
                             </button>
