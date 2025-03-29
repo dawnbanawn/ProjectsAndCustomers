@@ -11,6 +11,9 @@
 
             </div>
             <div class="modal-body">
+                <div style="width: 100%; display: flex; justify-content: center;">
+                <img src="/images/netimg.jpg" class="card-img-top" alt="Project Thumbnail" style="width: 100px; height: 100px; margin: auto;">
+                </div>
                 <form method="post" action="/Projects/Add">
                     <div class="mt-3">
                         <label class="form-label" for="title">Title</label>
@@ -18,7 +21,7 @@
                     </div>
                     <div class="mt-3">
                         <label class="form-label" for="description">Description</label>
-                        <textarea class="form-control" id="description" name="description" asp-for="Description"></textarea>
+                        <textarea class="form-control" id="description" name="description" required asp-for="Description"></textarea>
                     </div>
                     <div class="mt-3">
                         <label class="form-label" for="startDate">Start Date</label>
@@ -44,3 +47,66 @@
         </div>
     </div>
 </div>
+
+ <script>
+ document.querySelector('#addProjectModal form').onsubmit = function(event) {
+    // Get the values of all the inputs
+    const title = document.querySelector('#title').value.trim();
+    const description = document.querySelector('#description').value.trim();
+    const startDate = document.querySelector('#startDate').value;
+    const endDate = document.querySelector('#endDate').value;
+    const budget = document.querySelector('#budget').value;
+    const customerName = document.querySelector('#customerName').value.trim();
+
+    // Regular expression to allow only letters (both uppercase and lowercase) and spaces
+    const letterRegex = /^[A-Za-z\s]+$/;
+
+    // Validation for Title (letters only)
+    if (!title) {
+        alert('Title is required!');
+        event.preventDefault();
+    } else if (!letterRegex.test(title)) {
+        alert('Title must contain only letters and spaces!');
+        event.preventDefault();
+    }
+
+    // Validation for Description (optional, but must not exceed 500 characters if provided)
+    if (description && description.length > 500) {
+        alert('Description must not exceed 500 characters!');
+        event.preventDefault();
+    }
+
+    // Validation for Start and End Date (required and start must be before end)
+    if (!startDate) {
+        alert('Start Date is required!');
+        event.preventDefault();
+    }
+    if (!endDate) {
+        alert('End Date is required!');
+        event.preventDefault();
+    }
+    if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+        alert('Start Date must be earlier than End Date!');
+        event.preventDefault();
+    }
+
+    // Validation for Budget (required and must be greater than 0)
+    if (!budget) {
+        alert('Budget is required!');
+        event.preventDefault();
+    }
+    if (budget <= 0) {
+        alert('Budget must be greater than 0!');
+        event.preventDefault();
+    }
+
+    // Validation for Customer Name (letters only)
+    if (!customerName) {
+        alert('Customer Name is required!');
+        event.preventDefault();
+    } else if (!letterRegex.test(customerName)) {
+        alert('Customer Name must contain only letters and spaces!');
+        event.preventDefault();
+    }
+};
+ </script>

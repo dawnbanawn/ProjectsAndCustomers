@@ -11,12 +11,13 @@
 @* Button for opening the model which adds a project *@
 @* <button id="addProjectBtn" onclick="openModal()">Add Project</button>> *@
 <div style="display: flex; justify-content: space-between">
-    <div>
     @* Buttons for fitlering depending on the start end enddate which signals if the project is complete or in progress *@
-        <a href="#Foo" id="allProjectsBtn" onclick="filterProjects('all')">All Projects</a>
-        <a href="#Foo" id="completedProjectsBtn" onclick="filterProjects('completed')">Completed Projects</a>
-        <a href="#Foo" id="startedProjectsBtn" onclick="filterProjects('started')">Started Projects</a>
-    </div>
+        <div>
+            <!-- Buttons for filtering -->
+            <a href="#Foo" id="allProjectsBtn" onclick="filterProjects('all')">All Projects (<span id="allCount">0</span>)</a>
+            <a href="#Foo" id="completedProjectsBtn" onclick="filterProjects('completed')">Completed Projects (<span id="completedCount">0</span>)</a>
+            <a href="#Foo" id="startedProjectsBtn" onclick="filterProjects('started')">Started Projects (<span id="startedCount">0</span>)</a>
+        </div>
     @* Shows add project button if user is logged in *@
     @if (User.Identity.IsAuthenticated)
     {
@@ -125,38 +126,125 @@
         });
     }
     // Code for sumbitting the edit modal
-    $(document).on('submit', '#editProjectModal form', function(event) {
-        event.preventDefault(); // Prevent default form submission
-        let formData = $(this).serialize();
+    // $(document).on('submit', '#editProjectModal form', function(event) {
+    //     event.preventDefault(); // Prevent default form submission
+    //     let formData = $(this).serialize();
 
-        $.ajax({
-            type: 'POST',
-            url: '/Projects/Edit',
-            data: formData,
-            success: function(response) {
-                console.log('Edit successful!');
-                $('#editProjectModal').modal('hide'); // Close the modal
-                location.reload(); // Reload the page 
-            },
-            error: function(xhr, status, error) {
-                console.error('Edit failed:', error);
-            }
-        });
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: '/Projects/Edit',
+    //         data: formData,
+    //         success: function(response) {
+    //             console.log('Edit successful!');
+    //             $('#editProjectModal').modal('hide'); // Close the modal
+    //             location.reload(); // Reload the page 
+    //         },
+    //         error: function(xhr, status, error) {
+    //             console.error('Edit failed:', error);
+    //         }
+    //     });
+    // });
+
+        // Validation for edit parrtial view, and submitting it after.
+        $(document).on('submit', '#editProjectModal form', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Flag for validation
+        let isValid = true;
+
+        // Perform validation (same logic as before)
+        const title = $('#title').val().trim();
+        const description = $('#description').val().trim();
+        const startDate = $('#startDate').val();
+        const endDate = $('#endDate').val();
+        const budget = $('#budget').val();
+        const customerName = $('#customerName').val().trim();
+
+        const letterRegex = /^[A-Za-z\s]+$/;
+
+        // Validation for Title
+        if (!title) {
+            alert('Title is required!');
+            isValid = false;
+        } else if (!letterRegex.test(title)) {
+            alert('Title must contain only letters and spaces!');
+            isValid = false;
+        }
+
+        // Validation for Description
+        if (description && description.length > 500) {
+            alert('Description must not exceed 500 characters!');
+            isValid = false;
+        }
+
+        // Validation for Dates
+        if (!startDate) {
+            alert('Start Date is required!');
+            isValid = false;
+        }
+        if (!endDate) {
+            alert('End Date is required!');
+            isValid = false;
+        }
+        if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+            alert('Start Date must be earlier than End Date!');
+            isValid = false;
+        }
+
+        // Validation for Budget
+        if (!budget) {
+            alert('Budget is required!');
+            isValid = false;
+        }
+        if (budget <= 0) {
+            alert('Budget must be greater than 0!');
+            isValid = false;
+        }
+
+        // Validation for Customer Name
+        if (!customerName) {
+            alert('Customer Name is required!');
+            isValid = false;
+        } else if (!letterRegex.test(customerName)) {
+            alert('Customer Name must contain only letters and spaces!');
+            isValid = false;
+        }
+
+        // Proceed with AJAX submission only if validation passes
+        if (isValid) {
+            let formData = $(this).serialize();
+
+            $.ajax({
+                type: 'POST',
+                url: '/Projects/Edit',
+                data: formData,
+                success: function(response) {
+                    console.log('Edit successful!');
+                    $('#editProjectModal').modal('hide'); // Close the modal
+                    location.reload(); // Reload the page
+                },
+                error: function(xhr, status, error) {
+                    console.error('Edit failed:', error);
+                }
+            });
+        }
     });
 </script>
 
 
 
 <script> // Function to get and check all rows, and compare it to todays date, and filter depending on the button. Copilot helped.
-    function filterProjects(filter) {
+       function filterProjects(filter) {
         const today = new Date(); // Today's date
-        const rows = document.querySelectorAll('.card'); // All table rows
+        const rows = document.querySelectorAll('.card'); // All rows
+
+        let visibleCount = 0; // Initialize counter for visible rows
 
         rows.forEach(row => {
-            const endDateRaw = row.getAttribute('data-end-date'); // Get raw end date string
-            const startDateRaw = row.getAttribute('data-start-date'); // Get raw start date string
+            const endDateRaw = row.getAttribute('data-end-date'); // Raw end date string
+            const startDateRaw = row.getAttribute('data-start-date'); // Raw start date string
 
-            // Convert European format (DD/MM/YYYY HH:mm:ss) to ISO format (YYYY-MM-DDTHH:mm:ss), because the date in the model isn´t in the correct format to compare.
+            // Convert European format (DD/MM/YYYY HH:mm:ss) to ISO format
             const endDate = convertToISO(endDateRaw);
             const startDate = convertToISO(startDateRaw);
 
@@ -165,34 +253,64 @@
                 switch (filter) {
                     case 'all':
                         row.style.display = ''; // Show all rows
+                        visibleCount++; // Count this row
                         break;
                     case 'completed':
-                        row.style.display = (endDate < today) ? '' : 'none'; // Show completed rows
+                        if (endDate < today) {
+                            row.style.display = ''; // Show completed rows
+                            visibleCount++;
+                        } else {
+                            row.style.display = 'none'; // Hide non-completed rows
+                        }
                         break;
                     case 'started':
-                        row.style.display = (endDate >= today) ? '' : 'none'; // Show started rows
+                        if (endDate >= today) {
+                            row.style.display = ''; // Show started rows
+                            visibleCount++;
+                        } else {
+                            row.style.display = 'none'; // Hide non-started rows
+                        }
                         break;
                     default:
                         row.style.display = ''; // Default to showing all rows
+                        visibleCount++;
                 }
             } else {
                 console.error('Failed to parse date:', endDateRaw, startDateRaw);
                 row.style.display = 'none'; // Hide rows with invalid date format
             }
         });
+
+        // Update the button count dynamically
+        switch (filter) {
+            case 'all':
+                document.getElementById('allCount').textContent = visibleCount;
+                break;
+            case 'completed':
+                document.getElementById('completedCount').textContent = visibleCount;
+                break;
+            case 'started':
+                document.getElementById('startedCount').textContent = visibleCount;
+                break;
+        }
     }
 
-    // Helper function to convert European date format to ISO format, used by the filter function.
+    // Helper function to convert European date format to ISO format
     function convertToISO(dateString) {
         if (!dateString) return null;
-
         const parts = dateString.split(/[/ :]/); // Split the date by "/", " ", and ":"
         if (parts.length < 5) return null;
-
         const [day, month, year, hours, minutes, seconds] = parts;
-        // Format as ISO (YYYY-MM-DDTHH:mm:ss), s o that it can be compared to todayss date.
+        // Format as ISO (YYYY-MM-DDTHH:mm:ss)
         return new Date(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}`);
     }
+
+    // Initial counts when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        filterProjects('all'); // Set initial filter to "All Projects"
+        filterProjects('completed'); // Calculate count for "Completed Projects"
+        filterProjects('started'); // Calculate count for "Started Projects"
+    });
 </script>
 
 
