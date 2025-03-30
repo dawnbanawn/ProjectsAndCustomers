@@ -25,29 +25,29 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </head>
-<body style="background-color: #F0F8FF;">
+<body style="background-color: rgb(242, 243, 247); ">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ProjectsAndCustomers</a>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm" style="background-color: rgb(242, 243, 247); border-bottom: 1px solid black; ">
+            <div class="container-fluid" style="background-color: rgb(242, 243, 247); ">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
+                @*         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> *@
  @*                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="Add">Add</a>
                         </li> *@
-                        <li class="nav-item">
+@*                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="List">Projects</a>
-                        </li>
+                        </li> *@
                     </ul>
                     <ul class="navbar-nav">
                         @* Shows login/logout depending on if user is logged in *@
@@ -72,11 +72,14 @@
         </nav>
     </header>
     <div>
-        <div style="width: 200px; height: 100%; background: white; 
+        <div style="width: 200px; height: 100%; background-color: rgb(242, 243, 247); 
                     position: absolute; margin-top: -75px;
                     border-right: 1px solid black;">
-        <div style="margin-top: 100px; margin-left: 50px;">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="List">Projects</a>
+            <div style="height: 75px;">
+                <img src="/images/logoimg.jpg" alt="Project logo" style="margin-left: 10px; margin-top: 20px; width: 150px;">
+                </div>
+        <div style="margin-top: 50px; margin-left: 50px;">
+                <a class="btn btn-primary" asp-area="" asp-controller="Projects" asp-action="List">Projects</a>
         </div>
         </div>
         <div class="container">
@@ -87,11 +90,11 @@
     </div>
 
 
-    <footer class="border-top footer text-muted">
+@*     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2025 - ProjectsAndCustomers - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
-    </footer>
+    </footer> *@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

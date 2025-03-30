@@ -10,9 +10,9 @@
 <h1>Projects</h1>
 @* Button for opening the model which adds a project *@
 @* <button id="addProjectBtn" onclick="openModal()">Add Project</button>> *@
-<div style="display: flex; justify-content: space-between">
+<div style="display: flex; justify-content: space-between;">
     @* Buttons for fitlering depending on the start end enddate which signals if the project is complete or in progress *@
-        <div>
+    <div style=" margin-top: 50px;">
             <!-- Buttons for filtering -->
             <a href="#Foo" id="allProjectsBtn" onclick="filterProjects('all')">All Projects (<span id="allCount">0</span>)</a>
             <a href="#Foo" id="completedProjectsBtn" onclick="filterProjects('completed')">Completed Projects (<span id="completedCount">0</span>)</a>
@@ -28,7 +28,7 @@
 
 
 
-<div id="projectsTable" style="display: flex; flex-wrap: wrap" class="projectsContainer">
+<div id="projectsTable" style="display: flex; flex-wrap: wrap; margin-top: 50px;" class="projectsContainer">
         @foreach (var project in Model)
         {
         <div data-end-date="@project.EndDate" data-start-date="@project.StartDate" class="card shadow-lg" style="width: 300px; height: 200px; margin: 5px">
