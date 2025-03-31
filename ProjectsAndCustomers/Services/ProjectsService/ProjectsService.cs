@@ -6,9 +6,7 @@ using ProjectsAndCustomers.Models.Entities;
 
 namespace ProjectsAndCustomers.Services.ProjectsService {
     public class ProjectsService : IProjectsService { // This uses the interface
-                                                      //public IActionResult Add() {
-                                                      //    return View();
-                                                      //}
+
         private readonly ApplicationDbContext dbContext; // the variable we will use to reach dbcontext
         public ProjectsService(ApplicationDbContext dbContext) { // inject dbcontext whit this constructor
             this.dbContext = dbContext;
@@ -44,8 +42,7 @@ namespace ProjectsAndCustomers.Services.ProjectsService {
         }
 
         public async Task<bool> DeleteProjectAsync(int projectId) {
-            Console.WriteLine($"Attempting to delete project with ID: {projectId}");
-
+            //Console.WriteLine($"Attempting to delete project with ID: {projectId}");
             var project = await dbContext.Projects.FindAsync(projectId);
 
             if (project == null) {

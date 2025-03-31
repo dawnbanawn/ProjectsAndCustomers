@@ -9,22 +9,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IProjectsService, ProjectsService>(); // Inject the repository interface, copilot hj�lpte mig komma p� denna buggen.
+builder.Services.AddScoped<IProjectsService, ProjectsService>(); // Inject the repository interface, copilot hjälpte mig lösa bugg som krävde denna lösningen.
 // Inject dbcontext, use conenctions string in appsettings
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
 options.UseSqlServer(builder.Configuration.GetConnectionString("Projects")));
 
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 // Inject identityuser for autorization
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-//builder.Services.AddAuthentication()
-//        .AddCookie(IdentityConstants.ApplicationScheme);
-
-builder.Services.AddAuthentication();
+builder.Services.AddAuthentication(); // Needed for preventing users to reach some controllers
 builder.Services.AddAuthorization();
 
 

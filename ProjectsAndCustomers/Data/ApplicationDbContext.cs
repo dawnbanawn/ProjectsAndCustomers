@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ProjectsAndCustomers.Models.Entities;
 
 namespace ProjectsAndCustomers.Data {
-    public class ApplicationDbContext : IdentityDbContext<IdentityUser> // Change DbContext to IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser> // Change DbContext to IdentityDbContext, this was needed for handling users
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {
         }

@@ -15,23 +15,21 @@ namespace ProjectsAndCustomers.Controllers {
         private readonly IProjectsService projectsService;
         public ProjectsController(ApplicationDbContext dbContext, IProjectsService projectsService) { // inject dbcontext whit this constructor
             //this.dbContext = dbContext;
-            this.projectsService = projectsService;
+            this.projectsService = projectsService; // we change to this after the move to a service for the db connections.
         }
 
 
-        // Get method for getting the add page view, /projects/add 
-        [Authorize]
-        [HttpGet]
-        public IActionResult Add() {
-            return View();
-        }
+        // Get method for getting the add page view, /projects/add. This is no longer in use since the change to modal.
+        //[Authorize]
+        //[HttpGet]
+        //public IActionResult Add() {
+        //    return View();
+        //}
 
         // Post method for the submit button in the form with post method, asyncronous because of the db handling
-        // Copilot hjälpte mig lista ut att jag kunde ta med customerName bredvid viewModel argumentet, och bara duplicera processen.
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Add(AddProjectViewModel viewModel, string customerName) { // Post button returns form data bound to this model
-
 
             // Create a customer instance with incoming customer name from form
             var customer = new CustomerEntity {
@@ -57,7 +55,6 @@ namespace ProjectsAndCustomers.Controllers {
             //await dbContext.SaveChangesAsync(); // Actually saaving the changes
             await projectsService.AddProjectAsync(project);
 
-
             return RedirectToAction("List", "Projects"); // Go to list page after adding project.
         }
 
@@ -65,17 +62,12 @@ namespace ProjectsAndCustomers.Controllers {
         // Get list from database
         [HttpGet]
         public async Task<IActionResult> List() {
-            // Get data from projects entity, and include Customer (Copilot hjälpte mig komma på include här)
-            //var projects = await dbContext.Projects
-            //                               .Include(p => p.Customer)
-            //                               .ToListAsync();
             var projects = await projectsService.GetAllProjectsWithCustomersAsync(); // Get it from repository instead.
             return View(projects); // return the view with the data
         }
 
         //[HttpGet]
         //public async Task<IActionResult> Edit(int id) {
-        //    // Get only one project with incoming id, som sagt ovan så hjälpte copilot mig med include. KLurigt med två entiteter.
         //    //var project = await dbContext.Projects
         //    //                                 .Include(p => p.Customer)
         //    //                                 .FirstOrDefaultAsync(p => p.Id == id);
@@ -109,7 +101,6 @@ namespace ProjectsAndCustomers.Controllers {
                 return NotFound();
             }
 
-            // Check and initialize the Customer property if null
             project.Customer ??= new CustomerEntity();
 
             // Map the updated values
@@ -130,7 +121,7 @@ namespace ProjectsAndCustomers.Controllers {
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Delete([FromQuery] int id) {
-            if (id <= 0) {
+            if (id <= 0) { // Just in case, to avoid errors
                 return BadRequest("Invalid project ID.");
             }
 

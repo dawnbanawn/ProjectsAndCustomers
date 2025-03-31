@@ -49,6 +49,7 @@
 </div>
 
  <script>
+     // gets the form and trigger function on submit, copilot helped me write allt this faster, I had to change some of it.
  document.querySelector('#addProjectModal form').onsubmit = function(event) {
     // Get the values of all the inputs
     const title = document.querySelector('#title').value.trim();
@@ -58,7 +59,7 @@
     const budget = document.querySelector('#budget').value;
     const customerName = document.querySelector('#customerName').value.trim();
 
-    // Regular expression to allow only letters (both uppercase and lowercase) and spaces
+    // Regular expression to allow only letters and spaces
     const letterRegex = /^[A-Za-z\s]+$/;
 
     // Validation for Title (letters only)
@@ -70,7 +71,7 @@
         event.preventDefault();
     }
 
-    // Validation for Description (optional, but must not exceed 500 characters if provided)
+    // Validation for Description
     if (description && description.length > 500) {
         alert('Description must not exceed 500 characters!');
         event.preventDefault();
@@ -90,7 +91,6 @@
         event.preventDefault();
     }
 
-    // Validation for Budget (required and must be greater than 0)
     if (!budget) {
         alert('Budget is required!');
         event.preventDefault();

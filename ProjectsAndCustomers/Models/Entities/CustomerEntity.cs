@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-// from get started videon
+
 namespace ProjectsAndCustomers.Models.Entities {
     public class CustomerEntity {
         [Key]

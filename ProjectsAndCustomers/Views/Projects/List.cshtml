@@ -6,14 +6,11 @@
 
 @model List<ProjectsAndCustomers.Models.Entities.ProjectEntity> // Make a list of the model
 
-
 <h1>Projects</h1>
-@* Button for opening the model which adds a project *@
-@* <button id="addProjectBtn" onclick="openModal()">Add Project</button>> *@
+
 <div style="display: flex; justify-content: space-between;">
-    @* Buttons for fitlering depending on the start end enddate which signals if the project is complete or in progress *@
+    @* Buttons for filtering depending on the start end enddate which signals if the project is complete or in progress *@
     <div style=" margin-top: 50px;">
-            <!-- Buttons for filtering -->
             <a href="#Foo" id="allProjectsBtn" onclick="filterProjects('all')">All Projects (<span id="allCount">0</span>)</a>
             <a href="#Foo" id="completedProjectsBtn" onclick="filterProjects('completed')">Completed Projects (<span id="completedCount">0</span>)</a>
             <a href="#Foo" id="startedProjectsBtn" onclick="filterProjects('started')">Started Projects (<span id="startedCount">0</span>)</a>
@@ -21,28 +18,27 @@
     @* Shows add project button if user is logged in *@
     @if (User.Identity.IsAuthenticated)
     {
+        @* Button for opening the modal that adds a project *@
         <button class="btn btn-primary btn-lg active" id="addProjectBtn" onclick="openModal()">Add Project</button>
-
     }
 </div>
 
-
-
 <div id="projectsTable" style="display: flex; flex-wrap: wrap; margin-top: 50px;" class="projectsContainer">
+        @* Loops and shows all cards *@
         @foreach (var project in Model)
         {
         <div data-end-date="@project.EndDate" data-start-date="@project.StartDate" class="card shadow-lg" style="width: 300px; height: 200px; margin: 5px">
             <div style="display: flex; justify-content: space-between">
                 <img src="/images/netimg.jpg" class="card-img-top" alt="Project Thumbnail" style="width: 50px; height: 50px; margin-left: 10px; margin-top: 10px;">
             <div>
-                    <h5 class="card-title">@project.Title</h5>
-                    <h5 class="card-title">@project.Customer.CustomerName</h5>
+                <h5 class="card-title">@project.Title</h5>
+                <h5 class="card-title">@project.Customer.CustomerName</h5>
             </div>
                 <div class="dropdown" style="margin-right: 10px; margin-top: 10px;">
                 @* checks if user is logged in *@
                 @if (User.Identity.IsAuthenticated)
                 {
-                    @* Button for dropdown *@
+                    @* Button for dropdown with edit and delete *@
                     <button class="btn btn-secondary custom-dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                         ...
                     </button>
@@ -57,21 +53,14 @@
                 }
             </div>
             </div>
-            <div class="card-body">
-   
-
+            <div class="card-body"> 
                 <p class="card-text">@project.Description</p>
             </div>
-
-  
-               
-
             </div>
         }
     </div>
 
 
-@* <div id="modalContainer"></div> *@
 <div id="modalWrapper">
     @* Inject form here *@
 </div>
@@ -80,16 +69,13 @@
 @Html.Partial("_AddProjectModal", new ProjectsAndCustomers.Models.AddProjectViewModel())
 @await Html.PartialAsync("_EditProjectModal", new ProjectsAndCustomers.Models.Entities.ProjectEntity())
 
-
-
-
 @* Copilot helped me with ajax code for modals *@
 <script>
     //Delete button
     function deleteProject(projectId) {
         console.log("Deleting project with ID:", projectId);
 
-        fetch(`/Projects/Delete?id=${projectId}`, {
+        fetch(`/Projects/Delete?id=${projectId}`, { // Use the cotnroller delete post method
             method: 'POST'
         })
         .then(response => {
@@ -107,7 +93,7 @@
 
 
 
-    // Code for opening the add project modal
+    // Code for opening the add project partial view modal
     function openModal() {
         $('#addProjectModal').modal('show'); 
     }
@@ -116,7 +102,7 @@
     });
     // Code for opening the edit modal
     function editProject(productId) {
-        console.log("Product ID:", productId);
+        // console.log("Product ID:", productId);
         $.ajax({
             url: '/Projects/Edit/' + productId, // sends id to cotnroller
             success: function(data) {
@@ -152,7 +138,7 @@
         // Flag for validation
         let isValid = true;
 
-        // Perform validation (same logic as before)
+        // Perform validation, same as for add
         const title = $('#title').val().trim();
         const description = $('#description').val().trim();
         const startDate = $('#startDate').val();
@@ -233,12 +219,12 @@
 
 
 
-<script> // Function to get and check all rows, and compare it to todays date, and filter depending on the button. Copilot helped.
-       function filterProjects(filter) {
+<script> // Function to get and check all cards, and compare it to todays date, and filter depending on the button. Copilot helped.
+       function filterProjects(filter) { // filter parameter from the chosen filter button
         const today = new Date(); // Today's date
-        const rows = document.querySelectorAll('.card'); // All rows
+        const rows = document.querySelectorAll('.card'); // All cards
 
-        let visibleCount = 0; // Initialize counter for visible rows
+        let visibleCount = 0; // Initialize counter for visible cards
 
         rows.forEach(row => {
             const endDateRaw = row.getAttribute('data-end-date'); // Raw end date string
