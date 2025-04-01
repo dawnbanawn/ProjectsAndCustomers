@@ -9,7 +9,7 @@
 <h1>Projects</h1>
 
 <div style="display: flex; justify-content: space-between;">
-    @* Buttons for filtering depending on the start end enddate which signals if the project is complete or in progress *@
+    @* Buttons for filtering depending on the start end enddate which signals if the project is complete or in progress. Copilot helped with getting the count returned. *@
     <div style=" margin-top: 50px;">
             <a href="#Foo" id="allProjectsBtn" onclick="filterProjects('all')">All Projects (<span id="allCount">0</span>)</a>
             <a href="#Foo" id="completedProjectsBtn" onclick="filterProjects('completed')">Completed Projects (<span id="completedCount">0</span>)</a>
@@ -60,16 +60,15 @@
         }
     </div>
 
-
+@* Edit modal opens here *@
 <div id="modalWrapper">
-    @* Inject form here *@
 </div>
 
 @* The reusable partial view that loads the modal, it sends the model to it, copilot helped me with the code for activating the modal. *@
 @Html.Partial("_AddProjectModal", new ProjectsAndCustomers.Models.AddProjectViewModel())
-@await Html.PartialAsync("_EditProjectModal", new ProjectsAndCustomers.Models.Entities.ProjectEntity())
+@* @await Html.PartialAsync("_EditProjectModal", new ProjectsAndCustomers.Models.Entities.ProjectEntity()) *@
 
-@* Copilot helped me with ajax code for modals *@
+@* Copilot helped me with the ajax code in scripts below *@
 <script>
     //Delete button
     function deleteProject(projectId) {
@@ -93,14 +92,15 @@
 
 
 
-    // Code for opening the add project partial view modal
+    // Code for opening the partial view modal. Copilot helped.
     function openModal() {
         $('#addProjectModal').modal('show'); 
     }
         $(function() {
         $('.editModal').modal();
-    });
-    // Code for opening the edit modal
+    }
+    );
+    // Code for opening the edit modal. Copilot helped.
     function editProject(productId) {
         // console.log("Product ID:", productId);
         $.ajax({
@@ -111,25 +111,7 @@
             }
         });
     }
-    // Code for sumbitting the edit modal
-    // $(document).on('submit', '#editProjectModal form', function(event) {
-    //     event.preventDefault(); // Prevent default form submission
-    //     let formData = $(this).serialize();
 
-    //     $.ajax({
-    //         type: 'POST',
-    //         url: '/Projects/Edit',
-    //         data: formData,
-    //         success: function(response) {
-    //             console.log('Edit successful!');
-    //             $('#editProjectModal').modal('hide'); // Close the modal
-    //             location.reload(); // Reload the page 
-    //         },
-    //         error: function(xhr, status, error) {
-    //             console.error('Edit failed:', error);
-    //         }
-    //     });
-    // });
 
         // Validation for edit parrtial view, and submitting it after.
         $(document).on('submit', '#editProjectModal form', function(event) {
@@ -281,7 +263,7 @@
         }
     }
 
-    // Helper function to convert European date format to ISO format
+    // Helper function to convert European date format to ISO format, copilot helped to fix this previous bug.
     function convertToISO(dateString) {
         if (!dateString) return null;
         const parts = dateString.split(/[/ :]/); // Split the date by "/", " ", and ":"

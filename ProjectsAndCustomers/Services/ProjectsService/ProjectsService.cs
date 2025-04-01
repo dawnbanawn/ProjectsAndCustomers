@@ -40,7 +40,7 @@ namespace ProjectsAndCustomers.Services.ProjectsService {
             dbContext.Projects.Update(project);
             await dbContext.SaveChangesAsync();
         }
-
+        //Copilot helped with some of the codes when bug fixing
         public async Task<bool> DeleteProjectAsync(int projectId) {
             //Console.WriteLine($"Attempting to delete project with ID: {projectId}");
             var project = await dbContext.Projects.FindAsync(projectId);

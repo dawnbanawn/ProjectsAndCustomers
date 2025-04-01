@@ -15,7 +15,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("Projects")));
 
 
-// Inject identityuser for autorization
+// Inject identityuser for autorization, Copilot helped me when I tried to get Microsoft Identity to work.
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
